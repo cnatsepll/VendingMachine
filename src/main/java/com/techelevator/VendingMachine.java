@@ -10,6 +10,8 @@ public class VendingMachine {
 	private BigDecimal balance = new BigDecimal("0.00");
 
 	private Map<String, Stack<Items>> inventory;
+	
+	private Items boughtItem = null;
 
 	public VendingMachine() throws FileNotFoundException {
 		InventoryReader generatingInventory = new InventoryReader();
@@ -20,8 +22,9 @@ public class VendingMachine {
 		Items item = null;
 		if (inventory.get(slotID).size() > 0) {
 			if (balance.compareTo(inventory.get(slotID).peek().getPrice()) >= 0) {
-				this.balance = balance.subtract(inventory.get(slotID).peek().getPrice());
-				return inventory.get(slotID).pop();
+				this.balance = balance.subtract(inventory.get(slotID).peek().getPrice());				
+				boughtItem= inventory.get(slotID).pop();
+				return boughtItem;
 
 			}
 		}
@@ -49,8 +52,8 @@ public class VendingMachine {
 			
 		}
 		changeReturned = ("Your change is: " + quarterCount + "Quarter(s)" + dimeCount + "Dime(s)" + nickelCount
-				+ "Nickel(s)");
-		balance = new BigDecimal(0);
+				+ "Nickel(s) \n" + "Your new balance is " + balance);
+//		balance = new BigDecimal(0);
 		return changeReturned;
 	}
 
@@ -65,5 +68,8 @@ public class VendingMachine {
 	public void addToBalance(BigDecimal amountSubmitted) {
 		this.balance = balance.add(amountSubmitted);
 	}
-
+public Items getBoughtItem() {
+	return boughtItem;
+}
+	
 }

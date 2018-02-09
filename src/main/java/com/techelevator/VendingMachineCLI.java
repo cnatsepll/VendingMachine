@@ -12,6 +12,7 @@ public class VendingMachineCLI {
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE };
+	
 	private static final String PURCHASE_DISPLAY_FEED = "Feed Money";
 	private static final String PURCHASE_DISPLAY_SELECT = "Select Product";
 	private static final String PURCHASE_DISPLAY_FINAL = "Finish Transaction";
@@ -28,6 +29,7 @@ public class VendingMachineCLI {
 	public void run() throws FileNotFoundException {
 		InventoryReader newInventory = new InventoryReader();
 		VendingMachine VM500;
+		PurchaseBasket yourCart = new PurchaseBasket();
 
 		VM500 = new VendingMachine();
 
@@ -65,10 +67,13 @@ public class VendingMachineCLI {
 					System.out.println("What would you like to buy?");
 					Scanner userInput = new Scanner(System.in);
 					String purchaseKey = userInput.nextLine();
-					System.out.println(VM500.purchaseItem(purchaseKey));
+					yourCart.addToBasket(VM500.purchaseItem(purchaseKey));
+					System.out.println(VM500.getBoughtItem());
 				}
 				if (choice.equals(PURCHASE_DISPLAY_FINAL)) {
 					System.out.println(VM500.returnChange());
+					System.out.println(yourCart.consumeBasket());
+					
 				}
 			}
 		}
