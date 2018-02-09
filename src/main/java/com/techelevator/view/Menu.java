@@ -32,13 +32,23 @@ public class Menu {
 	}
 
 	public BigDecimal getAmountFromUserInput() {
+		String one = "1";
+		String two = "2";
+		String five = "5";
+		String ten = "10";
+		String twenty = "20";
+		String fifty = "50";
+		String oneHundred = "100";
 		String userInput;
 		out.println();
-		out.print("Please enter an amount >>>");
+		out.println("Please enter only (1, 2, 5, 10, 20, 50, 100)");
+		out.print("\nPlease enter an amount, type [done] when finished >>> $");
 		out.flush();
 
 		userInput = in.nextLine();
-		if (!userInput.toLowerCase().equals("done")) {
+		if ((!userInput.toLowerCase().equals("done"))
+				&& (userInput.equals(one) || userInput.equals(two) || userInput.equals(five) || userInput.equals(ten)
+						|| userInput.equals(twenty) || userInput.equals(fifty) || userInput.equals(oneHundred))) {
 			try {
 				return new BigDecimal(userInput);
 			} catch (NumberFormatException ex) {
@@ -46,9 +56,9 @@ public class Menu {
 				out.println();
 				out.flush();
 			}
-				
+
 		}
-		return null ;
+		return null;
 	}
 
 	private Object getChoiceFromUserInput(Object[] options) {
