@@ -40,12 +40,14 @@ public class VendingMachineCLI {
 				for (String slotID : VM500.getInventory().keySet()) {
 
 					System.out.println(VM500.getInventory().keySet().toArray()[counter]);
-					System.out.println(VM500.getInventory().get(slotID).toArray()[0] + "/nAmount Left");
-					System.out.println(VM500.getInventory().get(slotID).size());
+					System.out.println(VM500.getInventory().get(slotID).toArray()[0]);
+					System.out.println("Amount Left: " + VM500.getInventory().get(slotID).size());
+					System.out.println();
 					counter++;
 				}
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS,
+						"\nYour balance is: $" + VM500.getBalance());
 				// System.out.println("What would you like to purchase? ");
 				// Scanner userInput = new Scanner(System.in);
 				// String userChoice = userInput.nextLine();
@@ -54,8 +56,8 @@ public class VendingMachineCLI {
 				if (choice.equals(PURCHASE_DISPLAY_FEED)) {
 
 					VM500.addToBalance(menu.getAmountFromUserInput());
-					menu.getAmountFromUserInput();
-					System.out.println("your balance is" + VM500.getBalance());
+					// menu.getAmountFromUserInput();
+					// System.out.println("your balance is: $" + VM500.getBalance());
 
 				}
 
@@ -66,7 +68,7 @@ public class VendingMachineCLI {
 					System.out.println(VM500.purchaseItem(purchaseKey));
 				}
 				if (choice.equals(PURCHASE_DISPLAY_FINAL)) {
-					VM500.returnChange();
+					System.out.println(VM500.returnChange());
 				}
 			}
 		}

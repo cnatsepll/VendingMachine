@@ -28,27 +28,30 @@ public class VendingMachine {
 		return item;
 	}
 
-	public BigDecimal returnChange() {
+	public String returnChange() {
 		int quarterCount = 0;
 		int dimeCount = 0;
 		int nickelCount = 0;
 		String changeReturned = "";
 
-		while (balance.compareTo(new BigDecimal(0)) >= 0) {
-			if (balance.compareTo(balance.subtract(new BigDecimal("0.25"))) > 0) {
-				balance.subtract(new BigDecimal("0.25"));
+		while (balance.compareTo(new BigDecimal("0")) > 0) {
+			if (balance.compareTo(new BigDecimal("0.25")) >= 0) {
+				balance = balance.subtract(new BigDecimal("0.25"));
 				quarterCount++;
-			} else if (balance.compareTo(balance.subtract(new BigDecimal(0.10))) > 0) {
-				balance.subtract(new BigDecimal(0.10));
+			} else if (balance.compareTo(new BigDecimal("0.10")) >= 0) {
+				balance = balance.subtract(new BigDecimal("0.10"));
 				dimeCount++;
-			} else if (balance.compareTo(balance.subtract(new BigDecimal(0.05))) > 0) {
-				balance.subtract(new BigDecimal(0.05));
+			} else if (balance.compareTo(balance.subtract(new BigDecimal("0.05"))) >= 0) {
+				balance = balance.subtract(new BigDecimal("0.05"));
 				nickelCount++;
+				
 			}
+			
 		}
-		System.out.println("Your change is: " + quarterCount + "Quarter(s)" + dimeCount + "Dime(s)" + nickelCount
+		changeReturned = ("Your change is: " + quarterCount + "Quarter(s)" + dimeCount + "Dime(s)" + nickelCount
 				+ "Nickel(s)");
-		return balance;
+		balance = new BigDecimal(0);
+		return changeReturned;
 	}
 
 	public Map<String, Stack<Items>> getInventory() {

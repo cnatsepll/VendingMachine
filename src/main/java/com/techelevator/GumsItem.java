@@ -9,6 +9,11 @@ public class GumsItem extends Items{
 		super(name, price);
 
 	}
+
+	@Override
+	public String makeSound() {
+		return "Chew Chew, Yum!";
+	}
 	
 	
 	

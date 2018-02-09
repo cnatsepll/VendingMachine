@@ -16,13 +16,19 @@ public class Menu {
 		this.in = new Scanner(input);
 	}
 
-	public Object getChoiceFromOptions(Object[] options) {
+	public Object getChoiceFromOptions(Object[] options, String message) {
 		Object choice = null;
 		while(choice == null) {
 			displayMenuOptions(options);
+			System.out.println(message);
 			choice = getChoiceFromUserInput(options);
 		}
 		return choice;
+	}
+	
+	public Object getChoiceFromOptions(Object[] options) {
+		return getChoiceFromOptions(options, "");
+		
 	}
 
 	public BigDecimal getAmountFromUserInput() {
@@ -32,6 +38,7 @@ public class Menu {
 			out.flush();
 
 			String userInput = in.nextLine();
+			
 			try {
 				return new BigDecimal(userInput).setScale(2);
 			} catch(NumberFormatException ex) {
@@ -44,6 +51,8 @@ public class Menu {
 
 	private Object getChoiceFromUserInput(Object[] options) {
 		Object choice = null;
+		out.print("\nPlease choose an option >>> ");
+		out.flush();
 		String userInput = in.nextLine();
 		try {
 			int selectedOption = Integer.valueOf(userInput);
@@ -64,8 +73,9 @@ public class Menu {
 		for(int i = 0; i < options.length; i++) {
 			int optionNum = i+1;
 			out.println(optionNum+") "+options[i]);
+			
 		}
-		out.print("\nPlease choose an option >>> ");
 		out.flush();
+		
 	}
 }

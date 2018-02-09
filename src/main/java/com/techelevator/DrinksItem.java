@@ -9,6 +9,11 @@ public class DrinksItem extends Items{
 		super(name, price);
 
 	}
+
+	@Override
+	public String makeSound() {
+		return "Glug Glug, Yum";
+	}
 	
 	
 	

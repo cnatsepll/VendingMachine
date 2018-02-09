@@ -8,6 +8,11 @@ public class ChipsItem extends Items {
 		super(name, price);
 
 	}
+
+	@Override
+	public String makeSound() {
+		return "Chrunch Chrunch, Yum!";
+	}
 	
 
 }

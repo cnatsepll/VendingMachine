@@ -12,6 +12,12 @@ abstract class Items {
 		this.price = price;
 	}
 	
+	public abstract String makeSound();
+	
+	public String consume() {
+		return makeSound();
+	}
+	
 	@Override
 	public String toString() {
 		return name +" , " + price ;
