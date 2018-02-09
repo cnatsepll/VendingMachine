@@ -1,8 +1,7 @@
 package com.techelevator;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 import com.techelevator.view.Menu;
@@ -12,7 +11,7 @@ public class VendingMachineCLI {
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE };
-	
+
 	private static final String PURCHASE_DISPLAY_FEED = "Feed Money";
 	private static final String PURCHASE_DISPLAY_SELECT = "Select Product";
 	private static final String PURCHASE_DISPLAY_FINAL = "Finish Transaction";
@@ -48,32 +47,53 @@ public class VendingMachineCLI {
 					counter++;
 				}
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
-				choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS,
-						"\nYour balance is: $" + VM500.getBalance());
-				// System.out.println("What would you like to purchase? ");
-				// Scanner userInput = new Scanner(System.in);
-				// String userChoice = userInput.nextLine();
-				// VM500.getInventory().get(userChoice).pop();
-
-				if (choice.equals(PURCHASE_DISPLAY_FEED)) {
-
-					VM500.addToBalance(menu.getAmountFromUserInput());
-					// menu.getAmountFromUserInput();
-					// System.out.println("your balance is: $" + VM500.getBalance());
-
-				}
-
-				if (choice.equals(PURCHASE_DISPLAY_SELECT)) {
-					System.out.println("What would you like to buy?");
-					Scanner userInput = new Scanner(System.in);
-					String purchaseKey = userInput.nextLine();
-					yourCart.addToBasket(VM500.purchaseItem(purchaseKey));
-					System.out.println(VM500.getBoughtItem());
-				}
-				if (choice.equals(PURCHASE_DISPLAY_FINAL)) {
-					System.out.println(VM500.returnChange());
-					System.out.println(yourCart.consumeBasket());
+				while (true) {
+					choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS,
+							"\nCurrent Money Provided: $" + VM500.getBalance());
+					// System.out.println("What would you like to purchase? ");
+					// Scanner userInput = new Scanner(System.in);
+					// String userChoice = userInput.nextLine();
+					// VM500.getInventory().get(userChoice).pop();
 					
+					if (choice.equals(PURCHASE_DISPLAY_FEED)) {
+						BigDecimal amount = menu.getAmountFromUserInput();
+						while(amount != null) {
+							VM500.addToBalance(amount);
+							System.out.println("Your current balance is: $" + VM500.getBalance());
+							
+							amount = menu.getAmountFromUserInput();
+							
+						}
+						
+						
+						// menu.getAmountFromUserInput();
+						// System.out.println("your balance is: $" + VM500.getBalance());
+
+					}
+
+					if (choice.equals(PURCHASE_DISPLAY_SELECT)) {
+						System.out.println("What would you like to buy?");
+						Scanner userInput = new Scanner(System.in);
+						String purchaseKey = userInput.nextLine();
+						Items boughtItem = null;
+						try {
+							boughtItem = VM500.purchaseItem(purchaseKey);
+							yourCart.addToBasket(boughtItem);
+							System.out.println(boughtItem);
+						} catch (OutOfStockException e) {
+							System.out.println(e.getMessage());
+							choice.equals(PURCHASE_DISPLAY_SELECT);
+						} catch (InsufficientFundsException e) {
+							System.out.println(e.getMessage());
+							choice.equals(PURCHASE_DISPLAY_SELECT);
+						}
+					}
+
+					if (choice.equals(PURCHASE_DISPLAY_FINAL)) {
+						System.out.println(VM500.returnChange());
+						System.out.println(yourCart.consumeBasket());
+						break;
+					}
 				}
 			}
 		}

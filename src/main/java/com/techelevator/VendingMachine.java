@@ -10,25 +10,28 @@ public class VendingMachine {
 	private BigDecimal balance = new BigDecimal("0.00");
 
 	private Map<String, Stack<Items>> inventory;
-	
-	private Items boughtItem = null;
 
 	public VendingMachine() throws FileNotFoundException {
 		InventoryReader generatingInventory = new InventoryReader();
 		inventory = generatingInventory.inventoryImport();
 	}
 
-	public Items purchaseItem(String slotID) {
+	public Items purchaseItem(String slotID) throws OutOfStockException, InsufficientFundsException {
 		Items item = null;
+		
 		if (inventory.get(slotID).size() > 0) {
 			if (balance.compareTo(inventory.get(slotID).peek().getPrice()) >= 0) {
-				this.balance = balance.subtract(inventory.get(slotID).peek().getPrice());				
-				boughtItem= inventory.get(slotID).pop();
+				this.balance = balance.subtract(inventory.get(slotID).peek().getPrice());
+				Items boughtItem = inventory.get(slotID).pop();
 				return boughtItem;
-
+			} else {
+				throw new InsufficientFundsException("Insufficient funds");
 			}
+		} else {
+			throw new OutOfStockException("Item out of stock"); 
 		}
-		return item;
+		
+		
 	}
 
 	public String returnChange() {
@@ -47,13 +50,13 @@ public class VendingMachine {
 			} else if (balance.compareTo(balance.subtract(new BigDecimal("0.05"))) >= 0) {
 				balance = balance.subtract(new BigDecimal("0.05"));
 				nickelCount++;
-				
+
 			}
-			
+
 		}
-		changeReturned = ("Your change is: " + quarterCount + "Quarter(s)" + dimeCount + "Dime(s)" + nickelCount
-				+ "Nickel(s) \n" + "Your new balance is " + balance);
-//		balance = new BigDecimal(0);
+		changeReturned = ("\nYour change is: " + quarterCount + " Quarter(s), " + dimeCount + " Dime(s), " + nickelCount
+				+ " Nickel(s) \n" + "Your new balance is: $" + balance);
+		// balance = new BigDecimal(0);
 		return changeReturned;
 	}
 
@@ -68,8 +71,5 @@ public class VendingMachine {
 	public void addToBalance(BigDecimal amountSubmitted) {
 		this.balance = balance.add(amountSubmitted);
 	}
-public Items getBoughtItem() {
-	return boughtItem;
-}
-	
+
 }

@@ -18,35 +18,37 @@ public class Menu {
 
 	public Object getChoiceFromOptions(Object[] options, String message) {
 		Object choice = null;
-		while(choice == null) {
+		while (choice == null) {
 			displayMenuOptions(options);
 			System.out.println(message);
 			choice = getChoiceFromUserInput(options);
 		}
 		return choice;
 	}
-	
+
 	public Object getChoiceFromOptions(Object[] options) {
 		return getChoiceFromOptions(options, "");
-		
+
 	}
 
 	public BigDecimal getAmountFromUserInput() {
-		for(;;){
-			out.println();
-			out.print("Please enter an amount >>>");
-			out.flush();
+		String userInput;
+		out.println();
+		out.print("Please enter an amount >>>");
+		out.flush();
 
-			String userInput = in.nextLine();
-			
+		userInput = in.nextLine();
+		if (!userInput.toLowerCase().equals("done")) {
 			try {
-				return new BigDecimal(userInput).setScale(2);
-			} catch(NumberFormatException ex) {
+				return new BigDecimal(userInput);
+			} catch (NumberFormatException ex) {
 				out.println("Please enter a valid number.");
 				out.println();
 				out.flush();
 			}
+				
 		}
+		return null ;
 	}
 
 	private Object getChoiceFromUserInput(Object[] options) {
@@ -56,26 +58,27 @@ public class Menu {
 		String userInput = in.nextLine();
 		try {
 			int selectedOption = Integer.valueOf(userInput);
-			if(selectedOption > 0 && selectedOption <= options.length) {
+			if (selectedOption > 0 && selectedOption <= options.length) {
 				choice = options[selectedOption - 1];
 			}
-		} catch(NumberFormatException e) {
-			// eat the exception, an error message will be displayed below since choice will be null
+		} catch (NumberFormatException e) {
+			// eat the exception, an error message will be displayed below since choice will
+			// be null
 		}
-		if(choice == null) {
-			out.println("\n*** "+userInput+" is not a valid option ***\n");
+		if (choice == null) {
+			out.println("\n*** " + userInput + " is not a valid option ***\n");
 		}
 		return choice;
 	}
 
 	private void displayMenuOptions(Object[] options) {
 		out.println();
-		for(int i = 0; i < options.length; i++) {
-			int optionNum = i+1;
-			out.println(optionNum+") "+options[i]);
-			
+		for (int i = 0; i < options.length; i++) {
+			int optionNum = i + 1;
+			out.println(optionNum + ") " + options[i]);
+
 		}
 		out.flush();
-		
+
 	}
 }
