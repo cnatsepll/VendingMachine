@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -25,10 +26,12 @@ public class VendingMachineCLI {
 		this.menu = menu;
 	}
 
-	public void run() throws FileNotFoundException {
+	public void run() throws IOException {
 		InventoryReader newInventory = new InventoryReader();
-		VendingMachine VM500;
+		VendingMachine VM500 = new VendingMachine();
 		PurchaseBasket yourCart = new PurchaseBasket();
+		LogEntry logFile = new LogEntry();
+		
 
 		VM500 = new VendingMachine();
 
@@ -60,9 +63,8 @@ public class VendingMachineCLI {
 						while(amount != null) {
 							VM500.addToBalance(amount);
 							System.out.println("Your current balance is: $" + VM500.getBalance());
-							
+							logFile.logMethod("FEED MONEY",amount,VM500.getBalance());
 							amount = menu.getAmountFromUserInput();
-							
 						}
 						
 						
@@ -78,9 +80,11 @@ public class VendingMachineCLI {
 						Items boughtItem = null;
 						if(VM500.getInventory().containsKey(purchaseKey)) {
 							try {
+								BigDecimal moreLogMethod = VM500.getBalance();
 								boughtItem = VM500.purchaseItem(purchaseKey);
 								yourCart.addToBasket(boughtItem);
 								System.out.println(boughtItem);
+								logFile.logMethod(boughtItem.getName(), moreLogMethod, VM500.getBalance());
 							} catch (OutOfStockException e) {
 								System.out.println(e.getMessage());
 								choice.equals(PURCHASE_DISPLAY_SELECT);
@@ -96,7 +100,9 @@ public class VendingMachineCLI {
 					}
 
 					if (choice.equals(PURCHASE_DISPLAY_FINAL)) {
+						BigDecimal moreLogMethod = VM500.getBalance();
 						System.out.println(VM500.returnChange());
+						logFile.logMethod("GIVE CHANGE", moreLogMethod, VM500.getBalance());
 						System.out.println(yourCart.consumeBasket());
 						break;
 					}
@@ -105,7 +111,7 @@ public class VendingMachineCLI {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		Menu menu = new Menu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();

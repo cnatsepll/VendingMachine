@@ -11,7 +11,7 @@ public class ChipsItem extends Items {
 
 	@Override
 	public String makeSound() {
-		return "Chrunch Chrunch, Yum!";
+		return "Crunch Crunch, Yum!";
 	}
 	
 
